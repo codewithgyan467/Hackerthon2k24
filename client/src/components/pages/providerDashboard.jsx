@@ -1,17 +1,21 @@
 import { Routes, Route } from 'react-router-dom';
-
-// Provider Dashboard Key Components
-import ProviderProfile from '../components/ProviderDashboard/ProviderProfile';
-import AvailabilityManagement from '../components/ProviderDashboard/AvailabilityManagement';
-import RespondToRequests from '../components/ProviderDashboard/RespondToRequests';
+import ProviderProfile from '../ProviderDashboard/ProviderProfile';
+import AvailabilityManagement from '../ProviderDashboard/AvailabilityManagement';
+import RespondToRequests from '../ProviderDashboard/RespondToRequests';
+import Reviews from '../ProviderDashboard/Reviews';
+import EarningsReport from '../ProviderDashboard/EarningsReport';
+import SmartNotifications from '../ProviderDashboard/SmartNotifications';
 
 const ProviderDashboard = () => {
     return (
         <div>
             <Routes>
                 <Route path="profile" element={<ProviderProfile />} />
-                <Route path="availability" element={<AvailabilityManagement />} />
+                <Route path="availability-management" element={<AvailabilityManagement />} />
                 <Route path="respond-to-requests" element={<RespondToRequests />} />
+                <Route path="reviews" element={<Reviews />} />
+                <Route path="earnings-report" element={<EarningsReport />} />
+                <Route path="notifications" element={<SmartNotifications />} />
             </Routes>
         </div>
     );

@@ -1,13 +1,15 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-const providerSchema = new mongoose.Schema({
+const ProviderSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    serviceType: { type: String, required: true },
-    location: { type: String, required: true },
-    rating: { type: Number, default: 0 },
-    createdAt: { type: Date, default: Date.now },
+    email: { type: String, required: true, unique: true },
+    services: { type: [String], required: true },
+    availability: { type: [String], required: true },
+    isActive: { type: Boolean, default: true },
+});
+const AvailabilitySchema = new mongoose.Schema({
+    day: { type: String, required: true },
+    available: { type: Boolean, default: false },
 });
 
-const Provider = mongoose.model('Provider', providerSchema);
-
-export default Provider;
+module.exports = mongoose.model('Provider', ProviderSchema);

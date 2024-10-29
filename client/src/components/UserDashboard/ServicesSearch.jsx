@@ -1,11 +1,44 @@
-const ServiceSearch = () => (
-    <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-md transition-transform duration-300 transform hover:scale-105">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Find a Service</h2>
-        <input type="text" className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500" placeholder="Search..." />
-        <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
-            Search
-        </button>
-    </div>
-);
+import { useState } from 'react';
+import axios from 'axios';
+
+const ServiceSearch = () => {
+    const [query, setQuery] = useState('');
+    const [services, setServices] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleSearch = async () => {
+        setLoading(true);
+        setError('');
+        try {
+            const response = await axios.get(`http://localhost:5000/api/services/search?query=${query}`);
+            setServices(response.data);
+        // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            setError('Failed to fetch services');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div>
+            <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search for services"
+            />
+            <button onClick={handleSearch}>Search</button>
+            {loading && <p>Loading...</p>}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <ul>
+                {services.map(service => (
+                    <li key={service._id}>{service.name}</li>
+                ))}
+            </ul>
+        </div>
+    );
+};
 
 export default ServiceSearch;

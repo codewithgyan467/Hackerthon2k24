@@ -1,17 +1,34 @@
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-export const protect = (req, res, next) => {
-    let token = req.headers.authorization?.split(" ")[1];
+const authenticate = async (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Authentication failed: No token provided' });
+    }
 
-    if (token) {
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = decoded;
-            next();
-        } catch (error) {
-            res.status(401).json({ error: 'Not authorized' });
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = await User.findById(decoded.id).select('-password'); // Optionally exclude password from the user object
+        if (!req.user) {
+            return res.status(401).json({ message: 'Authentication failed: Invalid token' });
         }
-    } else {
-        res.status(401).json({ error: 'Not authorized, no token' });
+        next();
+    } catch (error) {
+        res.status(401).json({ message: 'Authentication failed: Token is invalid or expired' });
     }
 };
+
+const authorize = (roles) => {
+    return (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({ message: 'Unauthorized: User not authenticated' });
+        }
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ message: 'Forbidden: Access is denied' });
+        }
+        next();
+    };
+};
+
+module.exports = { authenticate, authorize };

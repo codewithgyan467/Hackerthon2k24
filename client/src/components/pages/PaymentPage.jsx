@@ -1,4 +1,4 @@
-import PaymentIntegration from '../components/PaymentIntegration';
+import PaymentIntegration from '../PaymentIntegration';
 
 const PaymentPage = () => {
     return (
