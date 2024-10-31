@@ -29,8 +29,8 @@ const MapView = () => {
     return (
         <div>
             <h2>Map View</h2>
-            {/* Implement the map rendering logic here */}
-            {/* For example, you could use a library like Leaflet or Google Maps API */}
+            
+            {/* Google Maps API use kribo lgibo */}
             {services.map(service => (
                 <div key={service.id}>
                     <p>{service.name} - {service.location}</p>
